@@ -9,7 +9,7 @@ module.exports = function main(options, cb) {
   const ready = cb || function () {};
   const opts = Object.assign(
     {
-      // Default options
+      
     },
     options,
   );

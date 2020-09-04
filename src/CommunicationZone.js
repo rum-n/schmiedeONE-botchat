@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import ChatZone from './ChatZone';
 import ContactWindow from './ContactWindow';
 import InputZone from './InputZone';
 
 const CommunicationZone = () => {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     value: '',
     disposable: '',
     history: ['How can I help?'],
+    answersBasic: [],
+    answersAdjust: [],
+    answersAdvanced: []
   });
-  const stateRef = React.useRef(state);
+  const stateRef = useRef(state);
 
   function handleChange(event) {
     setState({
@@ -36,29 +39,27 @@ const CommunicationZone = () => {
   }
 
   function dialogueEngine() {
-    const answersBasic = [
-      'can you elaborate?',
-      'and why do you believe that is so?',
-      'can you be more specific?',
-      'what would be your guess?',
-      'I need more details for this one',
-    ];
-    const answersAdvanced = [
-      'have you check the logs?',
-      'have you tried restarting?',
-      'what does the documentation say?',
-      'Maybe its a typo',
-    ];
-    const answersAdjust = [
-      'you need to be a bit more specific',
-      'come on I am trying to help',
-      'whatever',
-      'that does not sound like a bug',
-    ];
+    const fetchAnswers = async () => {
+      const answers = await fetch('http://localhost:8000/',{
+          mode: 'no-cors',
+          credentials: 'include',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        }
+      );
+      // const reply = await answers.json();
+      console.log(answers);
+      setState(answers);
+    };
+
+    fetchAnswers();
 
     if (stateRef.current.disposable.length <= 7) {
       let response =
-        answersAdjust[Math.floor(Math.random() * answersAdjust.length)];
+        state.answersAdjust[Math.floor(Math.random() * state.answersAdjust.length)];
       setState({
         ...stateRef.current,
         history: [...stateRef.current.history, response],
@@ -68,20 +69,24 @@ const CommunicationZone = () => {
       stateRef.current.disposable.length > 6
     ) {
       let response =
-        answersBasic[Math.floor(Math.random() * answersBasic.length)];
+        state.answersBasic[Math.floor(Math.random() * state.answersBasic.length)];
       setState({
         ...stateRef.current,
         history: [...stateRef.current.history, response],
       });
     } else if (stateRef.current.history.length >= 4) {
       let response =
-        answersAdvanced[Math.floor(Math.random() * answersAdvanced.length)];
+        state.answersAdvanced[Math.floor(Math.random() * state.answersAdvanced.length)];
       setState({
         ...stateRef.current,
         history: [...stateRef.current.history, response],
       });
     }
   }
+
+  useEffect(() => {
+    dialogueEngine();
+  }, []);
 
   function cleanHistory() {
     const tempHistory = state.history;
@@ -99,7 +104,7 @@ const CommunicationZone = () => {
 
   return (
     <div className="chatHost innerShadow">
-      <ContactWindow />
+      <ContactWindow name='Dr. Rubberduck'/>
       <ChatZone chatItem={state.history} />
       <InputZone
         handleChange={handleChange}

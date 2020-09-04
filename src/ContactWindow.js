@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
 
-function ContactWindow() {
+const ContactWindow = ({name}) => {
   return (
     <div className="headerWrapper">
-      <span className="contactName">Dr. Rubberduck</span>
+      <span className="contactName">{name}</span>
     </div>
   );
 }

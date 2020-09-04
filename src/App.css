@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   height: 100vh;
   background: rgb(34, 193, 195);
   background: linear-gradient(
@@ -46,15 +49,32 @@
 }
 
 .mainContainer {
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 40%;
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100%;
 }
+
+.historyContainer{
+  width: 25%;
+  min-height: 80vh;
+  margin-top: auto;
+  margin-bottom: auto;
+  background: white;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.sideChatWrapper {
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  text-align: left;
+  /* min-height: 80vh; */
+}
+
 .innerShadow {
   box-shadow: inset 0 0 3px #0000006e;
   background-color: #f7f7f7;
